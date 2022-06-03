@@ -10,8 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 
@@ -39,13 +43,14 @@ public class UserControllerTest {
         user.setName(userRequest.getName());
         user.setPassword(userRequest.getPassword());
 
-        // when
         when(userService.createUser(userRequest)).thenReturn(user);
+
+        // when
         ResponseEntity<UserResponse> response = controller.createUser(userRequest);
 
         // then
+        assertThat(response.getBody().getName()).isEqualTo(user.getName());
         verify(userService, times(1)).createUser(userRequest);
 
     }
-
 }
